@@ -1,0 +1,11 @@
+<package>
+  <name>camera</name>
+  <version>0.0.1</version>
+  <description>
+  Camera package
+  </description>
+  <maintainer email="veronikaysirotkina@gmail.com">Veronika Sirotkina</maintainer>
+  <license>None</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+</package>
