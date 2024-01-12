@@ -8,6 +8,7 @@ from sensor_msgs.msg import CompressedImage
 import cv2
 from cv_bridge import CvBridge
 
+
 class CameraReaderNode(DTROS):
 
     def __init__(self, node_name):
@@ -30,6 +31,7 @@ class CameraReaderNode(DTROS):
         # display frame
         cv2.imshow(self._window, image)
         cv2.waitKey(1)
+
 
 if __name__ == '__main__':
     # create the node
