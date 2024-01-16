@@ -1,1 +1,5 @@
 # LIST YOUR APT PACKAGES HERE
+
+# keyboard control
+kmod
+kbd
