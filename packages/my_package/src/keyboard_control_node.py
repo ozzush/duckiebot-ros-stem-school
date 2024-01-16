@@ -55,7 +55,7 @@ class KeyboardControlNode(DTROS):
 
 if __name__ == '__main__':
     # create the node
-    node = KeyboardControlNode(node_name='wheel_control_node')
+    node = KeyboardControlNode(node_name='keyboard_control_node')
     # run node
     node.run()
     # keep the process from terminating
