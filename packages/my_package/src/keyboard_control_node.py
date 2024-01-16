@@ -13,11 +13,11 @@ THROTTLE_RIGHT = 0.5       # 50% throttle
 DIRECTION_RIGHT = -1       # backward
 
 
-class WheelControlNode(DTROS):
+class KeyboardControlNode(DTROS):
 
     def __init__(self, node_name):
         # initialize the DTROS parent class
-        super(WheelControlNode, self).__init__(node_name=node_name, node_type=NodeType.GENERIC)
+        super(KeyboardControlNode, self).__init__(node_name=node_name, node_type=NodeType.GENERIC)
         # static parameters
         vehicle_name = os.environ['VEHICLE_NAME']
         wheels_topic = f"/{vehicle_name}/wheels_driver_node/wheels_cmd"
@@ -55,7 +55,7 @@ class WheelControlNode(DTROS):
 
 if __name__ == '__main__':
     # create the node
-    node = WheelControlNode(node_name='wheel_control_node')
+    node = KeyboardControlNode(node_name='wheel_control_node')
     # run node
     node.run()
     # keep the process from terminating
