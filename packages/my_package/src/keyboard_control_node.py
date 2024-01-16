@@ -22,8 +22,8 @@ class KeyboardControlNode(DTROS):
         vehicle_name = os.environ['VEHICLE_NAME']
         wheels_topic = f"/{vehicle_name}/wheels_driver_node/wheels_cmd"
         # form the message
-        self._vel_left = THROTTLE_LEFT * DIRECTION_LEFT
-        self._vel_right = THROTTLE_RIGHT * DIRECTION_RIGHT
+        self._vel_left = 0
+        self._vel_right = 0
         # construct publisher
         self._publisher = rospy.Publisher(wheels_topic, WheelsCmdStamped, queue_size=1)
 
@@ -31,21 +31,7 @@ class KeyboardControlNode(DTROS):
         # publish 10 messages every second (10 Hz)
         rate = rospy.Rate(0.1)
         while not rospy.is_shutdown():
-            vel_left = 0
-            vel_right = 0
-            lforward_key = 'w'
-            lbackwards_key = 's'
-            rforward_key = 'o'
-            rbackwards_key = 'l'
-            if keyboard.is_pressed(lforward_key) and not keyboard.is_pressed(lbackwards_key):
-                vel_left = 1 * THROTTLE_LEFT
-            elif keyboard.is_pressed(lbackwards_key) and not keyboard.is_pressed(lforward_key):
-                vel_left = -1 * THROTTLE_LEFT
-            if keyboard.is_pressed(rforward_key) and not keyboard.is_pressed(rbackwards_key):
-                vel_right = 1 * THROTTLE_RIGHT
-            elif keyboard.is_pressed(rbackwards_key) and not keyboard.is_pressed(rforward_key):
-                vel_right = -1 * THROTTLE_RIGHT
-            message = WheelsCmdStamped(vel_left=vel_left, vel_right=vel_right)
+            message = WheelsCmdStamped(vel_left=self._vel_left, vel_right=self._vel_right)
             self._publisher.publish(message)
             rate.sleep()
 
@@ -53,10 +39,31 @@ class KeyboardControlNode(DTROS):
         stop = WheelsCmdStamped(vel_left=0, vel_right=0)
         self._publisher.publish(stop)
 
+def run(node: KeyboardControlNode):
+    while not rospy.is_shutdown():
+        command = input("input command: ")
+        if command == 'e':
+            node._vel_left = THROTTLE_LEFT
+        elif command == 'd':
+            node._vel_left = 0
+        elif command == 'c':
+            node._vel_left = - THROTTLE_LEFT
+        elif command == 'o':
+            node._vel_right = THROTTLE_RIGHT
+        elif command == 'k':
+            node._vel_right = 0
+        elif command == 'm':
+            node._vel_right = - THROTTLE_RIGHT
+        else:
+            node._vel_left = 0
+            node._vel_right = 0
+
+
 if __name__ == '__main__':
     # create the node
     node = KeyboardControlNode(node_name='keyboard_control_node')
     # run node
     node.run()
+    run(node)
     # keep the process from terminating
     rospy.spin()
