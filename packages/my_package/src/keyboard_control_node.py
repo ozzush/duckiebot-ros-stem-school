@@ -2,10 +2,8 @@
 
 import os
 import rospy
-import threading
 from duckietown.dtros import DTROS, NodeType
 from duckietown_msgs.msg import WheelsCmdStamped
-import keyboard
 
 # throttle and direction for each wheel
 THROTTLE_LEFT = 0.5        # 50% throttle
