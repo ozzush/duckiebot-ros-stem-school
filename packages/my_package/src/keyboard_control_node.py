@@ -2,6 +2,7 @@
 
 import os
 import rospy
+import threading
 from duckietown.dtros import DTROS, NodeType
 from duckietown_msgs.msg import WheelsCmdStamped
 import keyboard
@@ -39,31 +40,34 @@ class KeyboardControlNode(DTROS):
         stop = WheelsCmdStamped(vel_left=0, vel_right=0)
         self._publisher.publish(stop)
 
-def run(node: KeyboardControlNode):
+
+def run(control_node: KeyboardControlNode):
     while not rospy.is_shutdown():
         command = input("input command: ")
         if command == 'e':
-            node._vel_left = THROTTLE_LEFT
+            control_node._vel_left = THROTTLE_LEFT
         elif command == 'd':
-            node._vel_left = 0
+            control_node._vel_left = 0
         elif command == 'c':
-            node._vel_left = - THROTTLE_LEFT
+            control_node._vel_left = - THROTTLE_LEFT
         elif command == 'o':
-            node._vel_right = THROTTLE_RIGHT
+            control_node._vel_right = THROTTLE_RIGHT
         elif command == 'k':
-            node._vel_right = 0
+            control_node._vel_right = 0
         elif command == 'm':
-            node._vel_right = - THROTTLE_RIGHT
+            control_node._vel_right = - THROTTLE_RIGHT
         else:
-            node._vel_left = 0
-            node._vel_right = 0
+            control_node._vel_left = 0
+            control_node._vel_right = 0
 
 
 if __name__ == '__main__':
     # create the node
     node = KeyboardControlNode(node_name='keyboard_control_node')
     # run node
-    node.run()
+    node_thread = threading.Thread(name="node_thread", target=node.run)
+    node_thread.start()
     run(node)
+    node_thread.join()
     # keep the process from terminating
     rospy.spin()
