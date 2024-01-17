@@ -29,7 +29,7 @@ class KeyboardControlNode(DTROS):
     def run(self):
         # publish 10 messages every second (10 Hz)
         while not rospy.is_shutdown():
-            command = input("input command: ")
+            command = input("input command [a, w, s, d]: ")
             if command == 'w':
                 self._vel_left = THROTTLE_LEFT
                 self._vel_right = THROTTLE_RIGHT
