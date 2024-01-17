@@ -32,6 +32,22 @@ class KeyboardControlNode(DTROS):
         # publish 10 messages every second (10 Hz)
         rate = rospy.Rate(0.1)
         while not rospy.is_shutdown():
+            command = input("input command: ")
+            if command == 'e':
+                self._vel_left = THROTTLE_LEFT
+            elif command == 'd':
+                self._vel_left = 0
+            elif command == 'c':
+                self._vel_left = - THROTTLE_LEFT
+            elif command == 'o':
+                self._vel_right = THROTTLE_RIGHT
+            elif command == 'k':
+                self._vel_right = 0
+            elif command == 'm':
+                self._vel_right = - THROTTLE_RIGHT
+            else:
+                self._vel_left = 0
+                self._vel_right = 0
             message = WheelsCmdStamped(vel_left=self._vel_left, vel_right=self._vel_right)
             self._publisher.publish(message)
             rate.sleep()
@@ -41,33 +57,10 @@ class KeyboardControlNode(DTROS):
         self._publisher.publish(stop)
 
 
-def run(control_node: KeyboardControlNode):
-    while not rospy.is_shutdown():
-        command = input("input command: ")
-        if command == 'e':
-            control_node._vel_left = THROTTLE_LEFT
-        elif command == 'd':
-            control_node._vel_left = 0
-        elif command == 'c':
-            control_node._vel_left = - THROTTLE_LEFT
-        elif command == 'o':
-            control_node._vel_right = THROTTLE_RIGHT
-        elif command == 'k':
-            control_node._vel_right = 0
-        elif command == 'm':
-            control_node._vel_right = - THROTTLE_RIGHT
-        else:
-            control_node._vel_left = 0
-            control_node._vel_right = 0
-
-
 if __name__ == '__main__':
     # create the node
     node = KeyboardControlNode(node_name='keyboard_control_node')
     # run node
-    node_thread = threading.Thread(name="node_thread", target=node.run)
-    node_thread.start()
-    run(node)
-    node_thread.join()
+    node.run()
     # keep the process from terminating
     rospy.spin()
