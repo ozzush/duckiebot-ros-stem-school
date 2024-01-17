@@ -30,7 +30,6 @@ class KeyboardControlNode(DTROS):
 
     def run(self):
         # publish 10 messages every second (10 Hz)
-        rate = rospy.Rate(0.1)
         while not rospy.is_shutdown():
             command = input("input command: ")
             if command == 'e':
@@ -50,7 +49,6 @@ class KeyboardControlNode(DTROS):
                 self._vel_right = 0
             message = WheelsCmdStamped(vel_left=self._vel_left, vel_right=self._vel_right)
             self._publisher.publish(message)
-            rate.sleep()
 
     def on_shutdown(self):
         stop = WheelsCmdStamped(vel_left=0, vel_right=0)
